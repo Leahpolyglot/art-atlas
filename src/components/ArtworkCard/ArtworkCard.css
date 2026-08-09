@@ -1,0 +1,86 @@
+.artwork-card {
+  background-color: #fff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e5e0d8;
+}
+
+.artwork-card__image {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  display: block;
+}
+
+.artwork-card__content {
+  padding: 20px 0 0;
+}
+
+.artwork-card__title {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 400;
+}
+
+.artwork-card__artist {
+  margin: 14px 0 0;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #444;
+}
+
+.artwork-card__date {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: #777;
+}
+
+@media screen and (max-width: 700px) {
+  .artwork-card__image {
+    height: 280px;
+  }
+
+  .artwork-card__title {
+    font-size: 22px;
+  }
+
+  .artwork-card {
+    max-width: 100%;
+  }
+
+  .artwork-card__content {
+    padding: 18px 16px 20px;
+  }
+}
+.artwork-card__image-wrapper {
+  position: relative;
+}
+
+.artwork-card__favorite {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.92);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.artwork-card__favorite:hover {
+  transform: scale(1.08);
+}
+
+.artwork-card__favorite_active {
+  background-color: #222;
+  color: #fff;
+}
