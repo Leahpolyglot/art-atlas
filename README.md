@@ -4,6 +4,12 @@ Art Atlas is a React application that allows users to explore artworks from muse
 
 The project was built as a final portfolio project and focuses on working with a third-party API, reusable React components, responsive design, loading states, error handling, routing, and local persistence.
 
+## Live Demo
+
+The application is deployed on Vercel and can be viewed here:
+
+https://art-atlas-tan.vercel.app
+
 ## Features
 
 - Search artworks by artist, title, or keyword
@@ -68,3 +74,31 @@ src/
 ├── index.css
 └── main.jsx
 ```
+
+## Running the Project Locally
+
+Clone the repository:
+
+git clone https://github.com/Leahpolyglot/art-atlas.git
+
+Navigate to the project directory:
+
+cd art-atlas
+
+Install the dependencies:
+
+npm install
+
+Start the development server:
+
+npm run dev
+
+## What I Learned
+
+Through this project, I strengthened my understanding of React component architecture, state management, API integration, asynchronous JavaScript, routing, responsive design, and browser storage.
+
+I also gained experience handling real-world API data, including loading, empty, and error states, while building a complete application from development to production deployment.
+
+## Deployment
+
+The project is deployed with Vercel and connected to the GitHub repository for continuous deployment.
