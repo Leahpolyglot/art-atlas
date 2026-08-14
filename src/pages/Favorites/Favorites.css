@@ -1,0 +1,40 @@
+.favorites__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+  margin-top: 48px;
+}
+
+.favorites__empty-state {
+  margin-top: 48px;
+  padding: 40px;
+  border: 1px solid #d8d4ce;
+  text-align: center;
+}
+
+.favorites__empty-title {
+  margin: 0;
+  font-family: "Roboto Slab", Georgia, serif;
+  font-size: 28px;
+  font-weight: 400;
+}
+
+.favorites__empty-text {
+  margin: 12px 0 0;
+  color: #666;
+  line-height: 1.5;
+}
+
+@media screen and (max-width: 900px) {
+  .favorites__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .favorites__grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}

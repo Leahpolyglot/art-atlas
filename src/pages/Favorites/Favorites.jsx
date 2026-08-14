@@ -1,4 +1,5 @@
 import ArtworkCard from "../../components/ArtworkCard/ArtworkCard";
+import "./Favorites.css";
 
 function Favorites({ favorites, onFavorite }) {
   return (
@@ -10,15 +11,15 @@ function Favorites({ favorites, onFavorite }) {
       </p>
 
       {favorites.length === 0 ? (
-        <div className="empty-state">
-          <h3 className="empty-state__title">No favorites yet.</h3>
+        <div className="favorites__empty-state">
+          <h3 className="favorites__empty-title">No favorites yet.</h3>
 
-          <p className="empty-state__text">
+          <p className="favorites__empty-text">
             Explore the collection and save the artworks you love.
           </p>
         </div>
       ) : (
-        <div className="artworks-grid">
+        <div className="favorites__grid">
           {favorites.map((artwork) => (
             <ArtworkCard
               key={artwork.objectID}

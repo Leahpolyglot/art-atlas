@@ -19,7 +19,7 @@
 
 .artwork-card__title {
   margin: 0;
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: "Roboto Slab", Georgia, serif;
   font-size: 24px;
   line-height: 1.2;
   font-weight: 400;
@@ -83,4 +83,22 @@
 .artwork-card__favorite_active {
   background-color: #222;
   color: #fff;
+}
+
+.artwork-card__favorite-icon {
+  width: 22px;
+  height: 22px;
+  display: block;
+  margin: auto;
+  fill: transparent;
+  stroke: #222;
+  stroke-width: 1.8;
+  transition:
+    fill 0.2s ease,
+    stroke 0.2s ease;
+}
+
+.artwork-card__favorite_active .artwork-card__favorite-icon {
+  fill: #fff;
+  stroke: #fff;
 }

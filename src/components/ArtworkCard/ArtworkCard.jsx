@@ -21,8 +21,15 @@ function ArtworkCard({ artwork, isFavorite, onFavorite }) {
           type="button"
           onClick={handleFavoriteClick}
           aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+          aria-pressed={isFavorite}
         >
-          {isFavorite ? "♥" : "♡"}
+          <svg
+            className="artwork-card__favorite-icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <use href="/icons.svg#heart-icon" />
+          </svg>
         </button>
       </div>
 
