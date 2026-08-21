@@ -38,3 +38,11 @@
     gap: 32px;
   }
 }
+
+.favorites__eyebrow {
+  margin: 0 0 18px;
+  color: #777;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}

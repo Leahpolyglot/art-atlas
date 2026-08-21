@@ -63,17 +63,18 @@
   position: absolute;
   top: 14px;
   right: 14px;
+  z-index: 10;
   width: 42px;
   height: 42px;
+  padding: 0;
   border: none;
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.92);
-  font-size: 24px;
-  line-height: 1;
   cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    background-color 0.2s ease;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .artwork-card__favorite:hover {
@@ -96,6 +97,7 @@
   transition:
     fill 0.2s ease,
     stroke 0.2s ease;
+  pointer-events: none;
 }
 
 .artwork-card__favorite_active .artwork-card__favorite-icon {

@@ -59,3 +59,24 @@
     gap: 8px;
   }
 }
+
+.header__auth-button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #777;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.header__auth-button:hover { color: #222; }
+
+.header__user-name {
+  margin-left: 8px;
+  color: #222;
+  font-weight: 500;
+}
+
+@media screen and (max-width: 700px) {
+  .header__user-name { display: none; }
+}

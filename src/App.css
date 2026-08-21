@@ -41,3 +41,10 @@
     font-size: 18px;
   }
 }
+
+.app_loading {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  color: #666;
+}
