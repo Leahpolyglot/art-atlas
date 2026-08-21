@@ -13,6 +13,7 @@ https://art-atlas-tan.vercel.app
 ## Features
 
 - Search artworks by artist, title, or keyword
+- Show 3 search results initially and reveal 3 more with the “Mostrar más” button
 - Display artwork information including image, title, artist, and date
 - Save and remove favorite artworks
 - Persist favorites using localStorage
@@ -21,6 +22,8 @@ https://art-atlas-tan.vercel.app
 - Empty state when no artworks are found
 - Error state when a request fails
 - Multi-page navigation using React Router
+- Local fonts loaded with `@font-face`
+- SVG interface icons
 
 ## Technologies
 
@@ -42,7 +45,7 @@ Introduces Art Atlas and provides a direct link to explore the collection.
 
 ### Explore
 
-Allows users to search for artworks and displays matching results in reusable artwork cards.
+Allows users to search for artworks and displays matching results in reusable artwork cards. Results are revealed three at a time.
 
 ### Favorites
 
@@ -59,16 +62,21 @@ The application first searches for matching artwork IDs and then requests detail
 ```text
 src/
 ├── assets/
+│   └── hero.webp
 ├── components/
 │   ├── ArtworkCard/
 │   ├── Footer/
 │   └── Header/
+├── fonts/
+│   ├── fonts.css
+│   └── local font files
 ├── pages/
 │   ├── Explore/
 │   ├── Favorites/
 │   └── Home/
 ├── utils/
-│   └── artApi.js
+│   ├── artApi.js
+│   └── constants.js
 ├── App.css
 ├── App.jsx
 ├── index.css
@@ -79,19 +87,39 @@ src/
 
 Clone the repository:
 
+```bash
 git clone https://github.com/Leahpolyglot/art-atlas.git
+```
 
 Navigate to the project directory:
 
+```bash
 cd art-atlas
+```
 
 Install the dependencies:
 
+```bash
 npm install
+```
 
 Start the development server:
 
+```bash
 npm run dev
+```
+
+Run the linter:
+
+```bash
+npm run lint
+```
+
+Create a production build:
+
+```bash
+npm run build
+```
 
 ## What I Learned
 
