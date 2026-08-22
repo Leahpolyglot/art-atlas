@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_MAIN_API_URL || "http://localhost:3000";
+const BASE_URL = import.meta.env.VITE_MAIN_API_URL;
 
 function checkResponse(response) {
   if (response.ok) {
@@ -9,7 +9,9 @@ function checkResponse(response) {
     .json()
     .catch(() => ({}))
     .then((data) => {
-      throw new Error(data.message || data.error || `Request failed: ${response.status}`);
+      throw new Error(
+        data.message || data.error || `Request failed: ${response.status}`,
+      );
     });
 }
 
@@ -33,12 +35,17 @@ function normalizeArtwork(artwork) {
     objectID: artwork.externalId,
     primaryImageSmall: artwork.imageUrl,
     artistDisplayName: artwork.artist,
-    objectDate: artwork.objectDate || (artwork.year ? String(artwork.year) : "Date unknown"),
+    objectDate:
+      artwork.objectDate ||
+      (artwork.year ? String(artwork.year) : "Date unknown"),
   };
 }
 
 function artworkPayload(artwork) {
-  const parsedYear = Number.parseInt(artwork.objectBeginDate || artwork.objectDate, 10);
+  const parsedYear = Number.parseInt(
+    artwork.objectBeginDate || artwork.objectDate,
+    10,
+  );
 
   return {
     externalId: artwork.objectID,
@@ -73,8 +80,8 @@ export const mainApi = {
   },
 
   getSavedArtworks(token) {
-    return request("/api/artworks", { headers: authHeaders(token) }).then((items) =>
-      items.map(normalizeArtwork),
+    return request("/api/artworks", { headers: authHeaders(token) }).then(
+      (items) => items.map(normalizeArtwork),
     );
   },
 
