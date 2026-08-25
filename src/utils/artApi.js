@@ -4,45 +4,59 @@ import {
   MET_API_BASE_URL,
 } from "./constants";
 
-export function searchArtworks(query) {
-  return fetch(
-    `${MET_API_BASE_URL}/search?hasImages=true&q=${encodeURIComponent(query)}`,
-  )
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Search request failed: ${response.status}`);
-      }
+async function fetchArtwork(id) {
+  try {
+    const response = await fetch(`${MET_API_BASE_URL}/objects/${id}`);
 
-      return response.json();
-    })
-    .then((result) => {
-      const ids = result.objectIDs?.slice(0, MAX_OBJECT_IDS_TO_CHECK) || [];
+    if (!response.ok) {
+      return null;
+    }
 
-      return Promise.all(
-        ids.map((id) =>
-          fetch(`${MET_API_BASE_URL}/objects/${id}`)
-            .then((response) => {
-              if (!response.ok) {
-                return null;
-              }
+    const artwork = await response.json();
 
-              return response.json();
-            })
-            .catch(() => null),
-        ),
+    if (!artwork.primaryImageSmall && !artwork.primaryImage) {
+      return null;
+    }
+
+    return artwork;
+  } catch {
+    return null;
+  }
+}
+
+export async function searchArtworks(query) {
+  try {
+    const searchResponse = await fetch(
+      `${MET_API_BASE_URL}/search?hasImages=true&q=${encodeURIComponent(query)}`,
+    );
+
+    if (!searchResponse.ok) {
+      throw new Error(`Search request failed: ${searchResponse.status}`);
+    }
+
+    const result = await searchResponse.json();
+    const ids = result.objectIDs?.slice(0, MAX_OBJECT_IDS_TO_CHECK) || [];
+
+    const artworks = [];
+
+    for (let index = 0; index < ids.length; index += 5) {
+      const batch = ids.slice(index, index + 5);
+
+      const batchResults = await Promise.all(
+        batch.map((id) => fetchArtwork(id)),
       );
-    })
-    .then((artworks) =>
-      artworks
-        .filter(
-          (artwork) =>
-            artwork && artwork.isPublicDomain && artwork.primaryImageSmall,
-        )
-        .slice(0, MAX_ARTWORK_RESULTS),
-    )
-    .catch((error) => {
-      throw new Error("Unable to load artworks from The Met API.", {
-        cause: error,
-      });
+
+      artworks.push(...batchResults.filter(Boolean));
+
+      if (artworks.length >= MAX_ARTWORK_RESULTS) {
+        break;
+      }
+    }
+
+    return artworks.slice(0, MAX_ARTWORK_RESULTS);
+  } catch (error) {
+    throw new Error("Unable to load artworks from The Met API.", {
+      cause: error,
     });
+  }
 }
