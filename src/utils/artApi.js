@@ -67,20 +67,18 @@ export async function searchArtworks(query) {
 
     const artworks = [];
 
-    for (let index = 0; index < ids.length; index += 3) {
-      const batch = ids.slice(index, index + 3);
+    for (const id of ids) {
+      const artwork = await fetchArtwork(id);
 
-      const batchResults = await Promise.all(
-        batch.map((id) => fetchArtwork(id)),
-      );
-
-      artworks.push(...batchResults.filter(Boolean));
+      if (artwork) {
+        artworks.push(artwork);
+      }
 
       if (artworks.length >= MAX_ARTWORK_RESULTS) {
         break;
       }
 
-      await delay(400);
+      await delay(350);
     }
 
     return artworks.slice(0, MAX_ARTWORK_RESULTS);

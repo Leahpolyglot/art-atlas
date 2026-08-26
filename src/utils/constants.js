@@ -7,4 +7,4 @@ export const MAIN_API_BASE_URL =
 
 export const RESULTS_PER_PAGE = 3;
 export const MAX_ARTWORK_RESULTS = 6;
-export const MAX_OBJECT_IDS_TO_CHECK = 30;
+export const MAX_OBJECT_IDS_TO_CHECK = 60;
