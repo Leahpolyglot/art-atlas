@@ -48,3 +48,19 @@
   min-height: 100vh;
   color: #666;
 }
+
+.app__error-message {
+  max-width: 1200px;
+  margin: 24px auto 0;
+  padding: 12px 40px;
+  color: #a33;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+@media screen and (max-width: 700px) {
+  .app__error-message {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+}

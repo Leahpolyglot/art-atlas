@@ -4,14 +4,42 @@ import {
   MET_API_BASE_URL,
 } from "./constants";
 
-async function fetchArtwork(id) {
-  try {
-    const response = await fetch(`${MET_API_BASE_URL}/objects/${id}`);
+function delay(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
-    if (!response.ok) {
-      return null;
+async function fetchWithRetry(url, retries = 2) {
+  for (let attempt = 0; attempt <= retries; attempt += 1) {
+    try {
+      const response = await fetch(url);
+
+      if (response.ok) {
+        return response;
+      }
+
+      if (attempt === retries) {
+        return null;
+      }
+    } catch {
+      if (attempt === retries) {
+        return null;
+      }
     }
 
+    await delay(700);
+  }
+
+  return null;
+}
+
+async function fetchArtwork(id) {
+  const response = await fetchWithRetry(`${MET_API_BASE_URL}/objects/${id}`);
+
+  if (!response) {
+    return null;
+  }
+
+  try {
     const artwork = await response.json();
 
     if (!artwork.primaryImageSmall && !artwork.primaryImage) {
@@ -26,12 +54,12 @@ async function fetchArtwork(id) {
 
 export async function searchArtworks(query) {
   try {
-    const searchResponse = await fetch(
+    const searchResponse = await fetchWithRetry(
       `${MET_API_BASE_URL}/search?hasImages=true&q=${encodeURIComponent(query)}`,
     );
 
-    if (!searchResponse.ok) {
-      throw new Error(`Search request failed: ${searchResponse.status}`);
+    if (!searchResponse) {
+      throw new Error("Search request failed");
     }
 
     const result = await searchResponse.json();
@@ -39,8 +67,8 @@ export async function searchArtworks(query) {
 
     const artworks = [];
 
-    for (let index = 0; index < ids.length; index += 5) {
-      const batch = ids.slice(index, index + 5);
+    for (let index = 0; index < ids.length; index += 3) {
+      const batch = ids.slice(index, index + 3);
 
       const batchResults = await Promise.all(
         batch.map((id) => fetchArtwork(id)),
@@ -51,6 +79,8 @@ export async function searchArtworks(query) {
       if (artworks.length >= MAX_ARTWORK_RESULTS) {
         break;
       }
+
+      await delay(400);
     }
 
     return artworks.slice(0, MAX_ARTWORK_RESULTS);

@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_MAIN_API_URL;
+import { MAIN_API_BASE_URL } from "./constants";
 
 function checkResponse(response) {
   if (response.ok) {
@@ -16,7 +16,7 @@ function checkResponse(response) {
 }
 
 function request(path, options = {}) {
-  return fetch(`${BASE_URL}${path}`, {
+  return fetch(`${MAIN_API_BASE_URL}${path}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",

@@ -22,12 +22,6 @@ function Login({ isOpen, onClose, onLogin, onSwitchToRegister }) {
     onSwitchToRegister();
   }
 
-  function handleSwitchToRegister() {
-    resetForm();
-    setServerError("");
-    onSwitchToRegister();
-  }
-
   function handleSubmit(event) {
     event.preventDefault();
     setServerError("");

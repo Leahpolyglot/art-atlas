@@ -17,6 +17,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const [authModal, setAuthModal] = useState(null);
+  const [favoriteError, setFavoriteError] = useState("");
   const [isCheckingToken, setIsCheckingToken] = useState(() => Boolean(localStorage.getItem("jwt")));
 
   const openLogin = useCallback(() => setAuthModal("login"), []);
@@ -26,7 +27,10 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem("jwt");
 
-    if (!token) return;
+    if (!token) {
+      setIsCheckingToken(false);
+      return;
+    }
 
     Promise.all([mainApi.getCurrentUser(token), mainApi.getSavedArtworks(token)])
       .then(([user, savedArtworks]) => {
@@ -41,28 +45,40 @@ function App() {
       .finally(() => setIsCheckingToken(false));
   }, []);
 
+  function establishSession(token) {
+    localStorage.setItem("jwt", token);
+
+    return Promise.all([mainApi.getCurrentUser(token), mainApi.getSavedArtworks(token)])
+      .then(([user, savedArtworks]) => {
+        setCurrentUser(user);
+        setFavorites(savedArtworks);
+        closeAuthModal();
+        return user;
+      })
+      .catch((error) => {
+        localStorage.removeItem("jwt");
+        setCurrentUser(null);
+        setFavorites([]);
+        throw error;
+      });
+  }
+
   function handleRegister(data) {
-    return mainApi.register(data);
+    return mainApi
+      .register(data)
+      .then(() => mainApi.login({ email: data.email, password: data.password }))
+      .then(({ token }) => establishSession(token));
   }
 
   function handleLogin(data) {
-    return mainApi.login(data).then(({ token }) => {
-      localStorage.setItem("jwt", token);
-
-      return Promise.all([mainApi.getCurrentUser(token), mainApi.getSavedArtworks(token)]).then(
-        ([user, savedArtworks]) => {
-          setCurrentUser(user);
-          setFavorites(savedArtworks);
-          closeAuthModal();
-        },
-      );
-    });
+    return mainApi.login(data).then(({ token }) => establishSession(token));
   }
 
   function handleLogout() {
     localStorage.removeItem("jwt");
     setCurrentUser(null);
     setFavorites([]);
+    setFavoriteError("");
     navigate("/");
   }
 
@@ -72,20 +88,33 @@ function App() {
       return Promise.resolve();
     }
 
+    setFavoriteError("");
     const token = localStorage.getItem("jwt");
     const savedArtwork = favorites.find(
       (favorite) => favorite.objectID === artwork.objectID,
     );
 
     if (savedArtwork) {
-      return mainApi.deleteArtwork(savedArtwork._id, token).then(() => {
-        setFavorites((items) => items.filter((item) => item._id !== savedArtwork._id));
-      });
+      return mainApi
+        .deleteArtwork(savedArtwork._id, token)
+        .then(() => {
+          setFavorites((items) => items.filter((item) => item._id !== savedArtwork._id));
+        })
+        .catch(() => {
+          setFavoriteError("We couldn't remove this artwork from your favorites. Please try again.");
+          return null;
+        });
     }
 
-    return mainApi.saveArtwork(artwork, token).then((newArtwork) => {
-      setFavorites((items) => [newArtwork, ...items]);
-    });
+    return mainApi
+      .saveArtwork(artwork, token)
+      .then((newArtwork) => {
+        setFavorites((items) => [newArtwork, ...items]);
+      })
+      .catch(() => {
+        setFavoriteError("We couldn't save this artwork to your favorites. Please try again.");
+        return null;
+      });
   }
 
   if (isCheckingToken) {
@@ -96,6 +125,12 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="app">
         <Header onLogin={openLogin} onLogout={handleLogout} />
+
+        {favoriteError && (
+          <p className="app__error-message" role="alert">
+            {favoriteError}
+          </p>
+        )}
 
         <Routes>
           <Route path="/" element={<Home />} />
